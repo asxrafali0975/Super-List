@@ -17,6 +17,10 @@
     //functions
 
     onMount(() => {
+        let token= localStorage.getItem("superlist")
+        if(!token){
+            goto('/login')
+        }
         let mode = localStorage.getItem("superListMode").trim();
         $MODE = parseFloat(mode);
         let dummy = localStorage.getItem("superlist_tasks")
@@ -25,6 +29,7 @@
             console.log(dummy)
             $arr=dummy
         }
+       
     });
 
     const finished = (index) => {
@@ -74,8 +79,10 @@
     class="h-[1000vh] w-[100vw]"
 >
     <div id="toggleBtn" class=" w-full flex items-center justify-between">
-        <h1>SuperList</h1>
-        <h1 class="font-bold font-serif">Task-page</h1>
+        <div class="h-[100%] ">
+            <img src="SuperList.jpeg" class="h-[50px] rounded-full ml-3" alt="">
+        </div>
+        <h1 class="font-bold font-serif">Task-View</h1>
 
         <label class="swap swap-rotate pr-4">
             <!-- this hidden checkbox controls the state -->
@@ -115,11 +122,11 @@
                     Task {index + 1}
                 </div>
                 <div class="collapse-content">
-                    <h4 class={obj.status ?  " done  m-2 font-serif font-semibold tracking-wide" : " m-2 font-serif font-semibold tracking-wide " } >
+                    <h2 class={obj.status ?  " sm:text-4xl  done  m-2 font-serif font-semibold tracking-wide" : " m-2 sm:text-4xl font-serif font-semibold tracking-wide " } >
                         {obj.data}
-                        <button class="btn btn-active btn-neutral bg-green-500"  onclick={()=>finished(index)}>{ obj.status ? "Undone" :"Done"  }</button>
-                        <button class="btn btn-active btn-neutral bg-red-500"   onclick={()=>deletetask(index)}>Delete</button>
-                    </h4>
+                    </h2>
+                    <button class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-green-500"  onclick={()=>finished(index)}>{ obj.status ? "Undone" :"Done"  }</button>
+                    <button class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-red-500"   onclick={()=>deletetask(index)}>Delete</button>
                 </div>
             </div>
            
@@ -136,4 +143,12 @@
            
             text-decoration: line-through;
         }
+
+        @media (min-width: 280px) and (max-width: 640px) {
+            button{
+                height: 10vw;
+
+        }
+    }
+
 </style>
