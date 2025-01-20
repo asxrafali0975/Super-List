@@ -49,9 +49,11 @@
 >
     <div
         id="toggleBtn"
-        class=" w-full flex items-center border-2 border-b-white justify-between"
+        class=" w-full flex items-center  justify-between"
     >
-        <h1>SuperList</h1>
+    <div class="h-[100%] ">
+        <img src="SuperList.jpeg" class="h-[50px] rounded-full ml-3" alt="">
+    </div>
         <h1 class="font-bold font-serif">Task-page</h1>
 
         <label class="swap swap-rotate pr-4">
@@ -146,5 +148,9 @@
         #btn {
             width: 20%;
         }
+    }
+
+    #toggleBtn,#one{
+        border-bottom: 1.5px solid rgba(214, 214, 214, 0.689);
     }
 </style>
