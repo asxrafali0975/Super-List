@@ -16,12 +16,8 @@ import { arr } from '../../store';
          let mode = localStorage.getItem("superListMode").trim();
 
         $MODE = parseFloat(mode);
-        let token = localStorage.getItem("superlist");
-        if(!localStorage.getItem("superlist")){
-            goto('/login')
-
-        }
-         
+        
+       
         let stored_tasks=localStorage.getItem("superlist_tasks")
         if(stored_tasks){
             stored_tasks=JSON.parse(stored_tasks)
