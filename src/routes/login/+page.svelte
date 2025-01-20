@@ -43,6 +43,18 @@
         $MODE = tog;
         localStorage.setItem("superListMode", $MODE);
     };
+
+    const linkfunc=()=>{
+        let token = localStorage.getItem("superlist");
+        
+        if (!token) {
+           alert("Accout do not exist , create new account !!")
+        }
+        else{
+            goto('/homepage')
+        }
+
+    }
 </script>
 
 <div
@@ -91,6 +103,7 @@
                 ? "rounded-full border-2 border-black sm:h-[15%]"
                 : "rounded-full img_back sm:h-[15%]"}
         />
+        <h1   class=" size text-[4vw] font-semibold font-mono">SuperList</h1>
         <input
             type="text"
             placeholder="Username"
@@ -107,7 +120,9 @@
         <button class="btn btn-primary bg-blue-400" onclick={loginBtn}
             >Login</button
         >
+        <button class="btn btn-active btn-link" onclick={linkfunc}>Already have account ? go to homepage</button>
     </div>
+    
 </div>
 
 <style>
@@ -124,6 +139,12 @@
             display: flex;
             align-items: center;
             justify-content: end;
+        }
+        input{
+            width: 70%;
+        }
+        .size{
+            font-size: 7vw;
         }
     }
 </style>
