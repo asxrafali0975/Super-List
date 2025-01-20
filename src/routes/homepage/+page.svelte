@@ -14,7 +14,8 @@
 
         $MODE = parseFloat(mode);
         let token = localStorage.getItem("superlist");
-        if (token) {
+        
+        if (!token) {
             goto("/login");
         }
 
