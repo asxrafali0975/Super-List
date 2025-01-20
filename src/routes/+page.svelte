@@ -7,7 +7,7 @@
     let password = null;
 
     onMount(() => {
-        goto('/login')
+        goto('/homepage')
     });
 
     
