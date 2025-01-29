@@ -1,10 +1,18 @@
 <script>
+    // imports
+
     import "../+page.svelte";
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
     import { MODE } from "../../store";
+
+    // initialization
+
     let username = $state(null);
     let password = $state(null);
+    let toggle = $state(true);
+
+    //  FUNCTIONS
 
     onMount(() => {
         let mode = localStorage.getItem("superListMode").trim();
@@ -35,8 +43,6 @@
         }
     };
 
-    let toggle = $state(true);
-
     const toggleFnc = () => {
         let tog = $MODE;
         tog = tog === 1 ? 0 : 1;
@@ -44,22 +50,20 @@
         localStorage.setItem("superListMode", $MODE);
     };
 
-    const linkfunc=()=>{
+    const linkfunc = () => {
         let token = localStorage.getItem("superlist");
-        
-        if (!token) {
-           alert("Accout do not exist , create new account !!")
-        }
-        else{
-            goto('/homepage')
-        }
 
-    }
+        if (!token) {
+            alert("Accout do not exist , create new account !!");
+        } else {
+            goto("/homepage");
+        }
+    };
 </script>
 
 <div
     id="container"
-    data-theme={$MODE ? "light" : "dracula"}
+    data-theme={$MODE ? "nord" : "dim"}
     class="h-[100vh] w-[100vw] flex items-center justify-center flex-col"
 >
     <div id="toggleBtn" class=" w-full flex items-center justify-end">
@@ -103,26 +107,27 @@
                 ? "rounded-full border-2 border-black sm:h-[15%]"
                 : "rounded-full img_back sm:h-[15%]"}
         />
-        <h1   class=" size text-[4vw] font-semibold font-mono">SuperList</h1>
+        <h1 class=" size text-[4vw] font-semibold font-mono">SuperList</h1>
         <input
             type="text"
             placeholder="Username"
             bind:value={username}
-            class="input input-bordered input-primary w-full max-w-xs"
+            class="input input-accent w-full max-w-xs"
         />
         <input
-            type="text"
+            type="password"
             placeholder="Password"
             bind:value={password}
-            class="input input-bordered input-primary w-full max-w-xs"
+            class="input input-accent w-full max-w-xs"
         />
 
         <button class="btn btn-primary bg-blue-400" onclick={loginBtn}
             >Login</button
         >
-        <button class="btn btn-active btn-link" onclick={linkfunc}>Already have account ? go to homepage</button>
+        <button class="btn btn-active btn-link" onclick={linkfunc}
+            >Already have account ? go to homepage</button
+        >
     </div>
-    
 </div>
 
 <style>
@@ -140,10 +145,10 @@
             align-items: center;
             justify-content: end;
         }
-        input{
+        input {
             width: 70%;
         }
-        .size{
+        .size {
             font-size: 7vw;
         }
     }
