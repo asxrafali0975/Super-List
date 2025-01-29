@@ -5,31 +5,31 @@
     import { goto } from "$app/navigation";
     import { MODE } from "../../store";
     import { arr } from "../../store";
+    import ViewComponent from "../components/ViewComponent.svelte";
+    import TimeCompo from "../components/TimeCompo.svelte";
 
     // variables
 
-    let start_drag_value=null;
-    let start_index=null;
-    let end_drag_value=null;
-    let end_index=null;
-
+    let start_drag_value = null;
+    let start_index = null;
+    let end_drag_value = null;
+    let end_index = null;
+    let filterValue = $state("No-Filter");
 
     //functions
 
     onMount(() => {
-        let token= localStorage.getItem("superlist")
-        if(!token){
-            goto('/login')
+        let token = localStorage.getItem("superlist");
+        if (!token) {
+            goto("/login");
         }
         let mode = localStorage.getItem("superListMode").trim();
         $MODE = parseFloat(mode);
-        let dummy = localStorage.getItem("superlist_tasks")
-        if(dummy){
-            dummy=JSON.parse(dummy)
-            console.log(dummy)
-            $arr=dummy
+        let dummy = localStorage.getItem("superlist_tasks");
+        if (dummy) {
+            dummy = JSON.parse(dummy);
+            $arr = dummy;
         }
-       
     });
 
     const finished = (index) => {
@@ -52,37 +52,34 @@
         localStorage.setItem("superListMode", $MODE);
     };
 
-    const dragStart=(index)=>{
-      start_drag_value=$arr[index]
-      start_index=index
-
-    
-    }
-    const dragTarget=(index)=>{
-        end_drag_value=$arr[index]
-        end_index=index
-        
-    
-
-    }
-    const change=()=>{
-        $arr[end_index]=start_drag_value
-        $arr[start_index]=end_drag_value
+    const dragStart = (index) => {
+        start_drag_value = $arr[index];
+        start_index = index;
+    };
+    const dragTarget = (index, event) => {
+        end_drag_value = $arr[index];
+        end_index = index;
+    };
+    const change = () => {
+        $arr[end_index] = start_drag_value;
+        $arr[start_index] = end_drag_value;
         localStorage.setItem("superlist_tasks", JSON.stringify($arr));
+    };
 
-    }
+    const FilterFunc = (e) => {
+        filterValue = e.target.innerHTML;
+    };
 </script>
 
 <div
     id="container"
-    data-theme={$MODE ? "valentine" : "dark"}
+    data-theme={$MODE ? "nord" : "dim"}
     class="h-[1000vh] w-[100vw]"
 >
     <div id="toggleBtn" class=" w-full flex items-center justify-between">
-        <div class="h-[100%] ">
-            <img src="SuperList.jpeg" class="h-[50px] rounded-full ml-3" alt="">
+        <div class="h-[100%] flex items-center justify-center">
+            <TimeCompo />
         </div>
-        <h1 class="font-bold font-serif">Task-View</h1>
 
         <label class="swap swap-rotate pr-4">
             <!-- this hidden checkbox controls the state -->
@@ -113,42 +110,60 @@
     </div>
 
     {#each $arr as obj, index}
-        <div class="join join-vertical w-full my-1" draggable="true" ondragstart={()=>dragStart(index)}  ondragenter={()=>dragTarget(index)}  ondragend={change}>
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div
+            class="join join-vertical w-full my-1"
+            draggable="true"
+            ondragstart={() => dragStart(index)}
+            ondragenter={() => dragTarget(index)}
+            ondragend={change}
+        >
             <div
                 class="collapse collapse-arrow join-item border-base-300 border"
             >
                 <input type="radio" name="my-accordion-4" checked="checked" />
                 <div class="collapse-title text-xl font-small font-mono">
-                    Task {index + 1}
+                   <h1>task {index + 1}</h1> 
                 </div>
                 <div class="collapse-content">
-                    <h2 class={obj.status ?  " sm:text-4xl  done  m-2 font-serif font-semibold tracking-wide" : " m-2 sm:text-4xl font-serif font-semibold tracking-wide " } >
+                    <h2
+                        class={obj.status
+                            ? " sm:text-4xl  done  m-2 font-serif font-semibold tracking-wide"
+                            : " m-2 sm:text-4xl font-serif font-semibold tracking-wide "}
+                    >
                         {obj.data}
                     </h2>
-                    <button class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-green-500"  onclick={()=>finished(index)}>{ obj.status ? "Undone" :"Done"  }</button>
-                    <button class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-red-500"   onclick={()=>deletetask(index)}>Delete</button>
+                    <button
+                        class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-green-500"
+                        onclick={() => finished(index)}
+                        >{obj.status ? "Undone" : "Done"}</button
+                    >
+                    <button
+                        class="btn btn-xs sm:btn-xs md:btn-sm lg:btn-md bg-red-500"
+                        onclick={() => deletetask(index)}>Delete</button
+                    >
+                    <ViewComponent {index} />
                 </div>
             </div>
-           
         </div>
     {/each}
 </div>
 
 <style>
+    .dragging {
+        background-color: #f07474; /* Example highlight color */
+    }
     #toggleBtn {
         border-bottom: 1.5px solid black;
     }
 
-    .done{
-           
-            text-decoration: line-through;
-        }
-
-        @media (min-width: 280px) and (max-width: 640px) {
-            button{
-                height: 10vw;
-
-        }
+    .done {
+        text-decoration: line-through;
     }
 
+    @media (min-width: 280px) and (max-width: 640px) {
+        button {
+            height: 10vw;
+        }
+    }
 </style>
